@@ -10,16 +10,7 @@ export default function Hero() {
   const containerRef = useRef<HTMLElement>(null)
 
   useGSAP(() => {
-    // Fade in text elements staggering
-    gsap.from('.hero-anim', {
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.2,
-      ease: 'power3.out',
-      delay: 0.2, // wait for page load slightly
-    })
-    
+
     // Fade in the 3D container without scale to prevent Canvas resize glitches
     gsap.from('.hero-3d', {
       y: 50,
@@ -28,6 +19,20 @@ export default function Hero() {
       ease: 'power3.out',
       delay: 0.5,
     })
+
+    // Slide up the 'About' section on mobile after 3D camera finishes its flight
+    const isMobile = window.innerWidth < 768
+    if (isMobile) {
+      gsap.fromTo(containerRef.current, 
+        { height: '100vh' },
+        { 
+          height: '85vh', 
+          duration: 1.5, 
+          ease: 'power3.inOut', 
+          delay: 3.0 // Triggers exactly when the 3D IntroCamera flight ends
+        }
+      )
+    }
   }, { scope: containerRef })
 
   return (

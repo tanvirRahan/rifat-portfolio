@@ -24,7 +24,7 @@ export default function HeroScene() {
         style={{ width: '100%', height: '100%', display: 'block' }}
         shadows={!isMobile} // Shadows disabled on mobile — removes entire shadow render pass
         dpr={[1, 1.5]}
-        camera={{ position: [0, 6, 12], fov: 45 }}
+        camera={{ position: isMobile ? [-2, 7, 18] : [0, 6, 12], fov: 45 }}
         gl={{
           antialias: !isMobile, // Mobile tile GPUs gain ~20% from skipping MSAA
           alpha: true,
@@ -32,13 +32,13 @@ export default function HeroScene() {
         performance={{ min: 0.5 }}
       >
         <Suspense fallback={null}>
-          {!introComplete && <IntroCamera onComplete={() => setIntroComplete(true)} />}
-          {introComplete && <OrbitControls target={[0, 2.5, -1]} enableZoom={false} enablePan={false} enableRotate={!isMobile} />}
+          {!introComplete && <IntroCamera onComplete={() => setIntroComplete(true)} isMobile={isMobile} />}
+          {introComplete && <OrbitControls target={[0, 2.5, -1]} enableZoom={false} enablePan={false} />}
 
           <Environment preset="night" />
 
           {/* LIGHTING */}
-          <ambientLight intensity={1.2} color="#a855f7" />
+          <ambientLight intensity={isMobile ? 2.5 : 1.2} color="#a855f7" />
 
           {/* Main directional light — shadow map smaller on desktop, none on mobile */}
           <directionalLight

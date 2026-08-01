@@ -69,7 +69,7 @@ export default function About() {
 
           {/* Bio Content */}
           <div className="flex flex-col gap-6">
-            
+
             {/* ============================== */}
             {/* SHORT BIO START (Always visible) */}
             {/* ============================== */}
@@ -85,10 +85,9 @@ export default function About() {
             {/* ============================== */}
             {/* DETAILED BIO START (Hidden initially) */}
             {/* ============================== */}
-            <div 
-              className={`overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${
-                isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
-              }`}
+            <div
+              className={`overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+                }`}
             >
               <div className="flex flex-col gap-4 text-lg text-text-muted leading-relaxed pt-2">
                 <p>
@@ -104,7 +103,7 @@ export default function About() {
             </div>
 
             {/* Read More Toggle Button */}
-            <button 
+            <button
               onClick={() => setIsExpanded(!isExpanded)}
               className="about-text self-start flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-primary transition-colors hover:text-white mt-2"
             >
