@@ -33,7 +33,7 @@ export default function HeroScene() {
       >
         <Suspense fallback={null}>
           {!introComplete && <IntroCamera onComplete={() => setIntroComplete(true)} />}
-          {introComplete && <OrbitControls target={[0, 2.5, -1]} enableZoom={false} enablePan={false} />}
+          {introComplete && <OrbitControls target={[0, 2.5, -1]} enableZoom={false} enablePan={false} enableRotate={!isMobile} />}
 
           <Environment preset="night" />
 

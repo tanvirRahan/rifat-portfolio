@@ -34,10 +34,10 @@ export default function Hero() {
     <section
       id="hero"
       ref={containerRef}
-      className="relative flex min-h-screen items-center overflow-hidden border-b border-surface-lighter/30 pt-16"
+      className="relative flex h-[85vh] md:min-h-screen items-center overflow-hidden border-b border-surface-lighter/30 pt-16"
     >
-      {/* 3D Scene (Full screen on all devices) */}
-      <div className="hero-3d absolute left-0 top-0 h-[100dvh] w-full z-0 overflow-hidden" style={{ background: 'rgba(6, 182, 212, 0.03)' }}>
+      {/* 3D Scene (Full screen on desktop, 85vh on mobile) */}
+      <div className="hero-3d absolute left-0 top-0 h-full w-full z-0 overflow-hidden" style={{ background: 'rgba(6, 182, 212, 0.03)' }}>
         <Suspense fallback={null}>
           <HeroScene />
         </Suspense>

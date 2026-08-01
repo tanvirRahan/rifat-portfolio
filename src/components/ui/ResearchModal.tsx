@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { X, Mail, BookOpen, CheckCircle2, FileText, Activity } from 'lucide-react'
+import { createPortal } from 'react-dom'
 import Button from './Button'
 import { getTagColors } from '@/utils/tagColors'
 
@@ -35,7 +36,9 @@ export default function ResearchModal({ isOpen, onClose }: ResearchModalProps) {
 
   if (!isOpen) return null
 
-  return (
+  if (!isOpen) return null
+
+  return createPortal(
     <div
       className={`fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12 transition-all duration-300 ${
         isVisible ? 'opacity-100 visible' : 'opacity-0 invisible'
@@ -209,6 +212,7 @@ export default function ResearchModal({ isOpen, onClose }: ResearchModalProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

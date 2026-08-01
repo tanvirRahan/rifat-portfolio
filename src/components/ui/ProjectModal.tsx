@@ -3,6 +3,7 @@ import type { Project } from '@/data/projects'
 import { X, ExternalLink, CheckCircle2 } from 'lucide-react'
 import Button from './Button'
 import { getTagColors } from '@/utils/tagColors'
+import { createPortal } from 'react-dom'
 
 function GithubIcon({ size = 24 }: { size?: number }) {
   return (
@@ -61,7 +62,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   if (!project) return null
 
-  return (
+  return createPortal(
     <div
       className={`fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12 transition-all duration-300 ${isVisible ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
@@ -247,6 +248,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

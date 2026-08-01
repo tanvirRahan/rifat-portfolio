@@ -101,7 +101,7 @@ export default function Coder() {
         {/* Sci-Fi Particles — reduced on desktop, disabled on mobile to prevent overdraw */}
         <Sparkles 
           position={[0, 3.0, 1.0]} 
-          count={isMobile ? 0 : 40} 
+          count={isMobile ? 25 : 40} 
           scale={[4, 4, 4]} 
           size={2.0} 
           color="#06b6d4" 
