@@ -1,0 +1,41 @@
+export const getTagColors = (tag: string) => {
+  const colors: Record<string, { bg: string, text: string, border: string }> = {
+    'Next.js': { bg: 'bg-black/50', text: 'text-white', border: 'border-white/20' },
+    'React': { bg: 'bg-[#61DAFB]/10', text: 'text-[#61DAFB]', border: 'border-[#61DAFB]/20' },
+    'Tailwind CSS': { bg: 'bg-[#38B2AC]/10', text: 'text-[#38B2AC]', border: 'border-[#38B2AC]/20' },
+    'Stripe': { bg: 'bg-[#6772E5]/10', text: 'text-[#8A94F8]', border: 'border-[#6772E5]/20' },
+    'Django': { bg: 'bg-[#092E20]/50', text: 'text-[#44B78B]', border: 'border-[#44B78B]/20' },
+    'Celery': { bg: 'bg-[#37814A]/10', text: 'text-[#4CAF50]', border: 'border-[#37814A]/20' },
+    'Redis': { bg: 'bg-[#DC382D]/10', text: 'text-[#FF4B3E]', border: 'border-[#DC382D]/20' },
+    'PostgreSQL': { bg: 'bg-[#336791]/10', text: 'text-[#5698D6]', border: 'border-[#336791]/20' },
+    'Docker': { bg: 'bg-[#2496ED]/10', text: 'text-[#4AAAF2]', border: 'border-[#2496ED]/20' },
+    'NGINX': { bg: 'bg-[#009639]/10', text: 'text-[#00D652]', border: 'border-[#009639]/20' },
+    'Azure': { bg: 'bg-[#0078D4]/10', text: 'text-[#4FA8FF]', border: 'border-[#0078D4]/20' },
+    'Sanity': { bg: 'bg-[#F03E2F]/10', text: 'text-[#F03E2F]', border: 'border-[#F03E2F]/20' },
+    'Framer Motion': { bg: 'bg-[#E902B5]/10', text: 'text-[#E902B5]', border: 'border-[#E902B5]/20' },
+    'Zustand': { bg: 'bg-[#433E38]/50', text: 'text-[#F3F3F3]', border: 'border-white/10' },
+    'Firebase': { bg: 'bg-[#FFCA28]/10', text: 'text-[#FFCA28]', border: 'border-[#FFCA28]/20' },
+    'Node.js': { bg: 'bg-[#339933]/10', text: 'text-[#46C446]', border: 'border-[#339933]/20' },
+    'MongoDB': { bg: 'bg-[#47A248]/10', text: 'text-[#56C557]', border: 'border-[#47A248]/20' },
+    'Three.js': { bg: 'bg-black/50', text: 'text-white', border: 'border-white/30' },
+    'Express': { bg: 'bg-gray-800/50', text: 'text-gray-300', border: 'border-gray-500/20' },
+    'Python': { bg: 'bg-[#3776AB]/10', text: 'text-[#3776AB]', border: 'border-[#3776AB]/20' },
+    'Groq AI': { bg: 'bg-[#F55036]/10', text: 'text-[#F55036]', border: 'border-[#F55036]/20' },
+    'Cloudinary': { bg: 'bg-[#3448C5]/10', text: 'text-[#3448C5]', border: 'border-[#3448C5]/20' },
+    'Google OAuth': { bg: 'bg-[#4285F4]/10', text: 'text-[#4285F4]', border: 'border-[#4285F4]/20' },
+    'REST API': { bg: 'bg-[#0052CC]/10', text: 'text-[#0052CC]', border: 'border-[#0052CC]/20' },
+    'Gunicorn': { bg: 'bg-[#499848]/10', text: 'text-[#499848]', border: 'border-[#499848]/20' },
+    'Machine Learning': { bg: 'bg-[#9C27B0]/10', text: 'text-[#C026D3]', border: 'border-[#9C27B0]/20' },
+    'Scikit-Learn': { bg: 'bg-[#F7931E]/10', text: 'text-[#F7931E]', border: 'border-[#F7931E]/20' },
+    'Streamlit': { bg: 'bg-[#FF4B4B]/10', text: 'text-[#FF4B4B]', border: 'border-[#FF4B4B]/20' },
+    'XGBoost': { bg: 'bg-[#006699]/10', text: 'text-[#38BDF8]', border: 'border-[#006699]/20' },
+    'LightGBM': { bg: 'bg-[#FFC107]/10', text: 'text-[#FBBF24]', border: 'border-[#FFC107]/20' },
+    'NLP': { bg: 'bg-[#8BC34A]/10', text: 'text-[#A3E635]', border: 'border-[#8BC34A]/20' },
+    'Pandas': { bg: 'bg-[#150458]/20', text: 'text-[#E70488]', border: 'border-[#E70488]/20' },
+    'Plotly': { bg: 'bg-[#3F4F75]/30', text: 'text-[#A78BFA]', border: 'border-[#A78BFA]/20' },
+    'Meta Stacking': { bg: 'bg-[#14B8A6]/10', text: 'text-[#14B8A6]', border: 'border-[#14B8A6]/20' },
+  }
+
+  const defaultColors = { bg: 'bg-primary/10', text: 'text-primary', border: 'border-primary/20' }
+  return colors[tag] || defaultColors
+}

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Tanvir Rahan Rifat — Full-Stack Developer. React, TypeScript, Three.js, Django, PostgreSQL." />
+
+    <!-- Mobile browser chrome color — matches surface background -->
+    <meta name="theme-color" content="#060912" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- Open Graph / Social Sharing (Facebook, LinkedIn) -->
+    <meta property="og:title" content="Tanvir Rahan Rifat | Full-Stack Developer Portfolio" />
+    <meta property="og:description" content="Immersive 3D Developer Portfolio built with React, Three.js, and Tailwind CSS. Showcasing Full-Stack projects and Backend Architecture." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://rifat-portfolio.vercel.app/" />
+    <meta property="og:image" content="https://rifat-portfolio.vercel.app/og-image.jpg" />
+
+    <!-- Twitter Card for Twitter/X Sharing -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Tanvir Rahan Rifat | Developer Portfolio" />
+    <meta name="twitter:description" content="Immersive 3D Developer Portfolio built with React, Three.js, and Tailwind CSS." />
+    <meta name="twitter:image" content="https://rifat-portfolio.vercel.app/og-image.jpg" />
+
+    <!-- Canonical URL (Prevents duplicate content issues for SEO) -->
+    <link rel="canonical" href="https://rifat-portfolio.vercel.app/" />
+
+    <!-- SEO Keywords -->
+    <meta name="keywords" content="Tanvir Rahan Rifat, Rifat Portfolio, Full-Stack Developer, Frontend Developer, Backend Developer, React, Three.js, WebGL, Dhaka, Bangladesh, Django, Python" />
+
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Rifat | Developer Portfolio</title>
+
+    <!-- Prevent white flash before React/Fonts load -->
+    <style>
+      html, body {
+        background-color: #060912 !important; /* Match var(--color-surface) */
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
+    <!-- Google Font: Inter — non-render-blocking load pattern -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- media="print" trick: browser loads font without blocking rendering, then switches to all -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <!-- Fallback for no-JS -->
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    </noscript>
+  </head>
+  <body style="background-color: #060912; margin: 0; padding: 0;">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

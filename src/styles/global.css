@@ -1,0 +1,219 @@
+@import "tailwindcss";
+
+/*
+ * Design System — Custom Theme Tokens
+ * ====================================
+ * Tailwind v4 uses @theme to define custom design tokens.
+ * These become usable as utility classes: bg-primary, text-accent, etc.
+ */
+
+@theme {
+  /* Typography */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand colors — neon violet dark palette */
+  --color-primary: #a855f7;       /* purple-500: main accent */
+  --color-primary-light: #c084fc; /* purple-400: hover states */
+  --color-primary-dark: #9333ea;  /* purple-600: pressed states */
+
+  --color-secondary: #06b6d4;     /* cyan-500: secondary accent */
+  --color-secondary-light: #22d3ee;
+
+  --color-surface: #060912;       /* ultra-dark: main background */
+  --color-surface-light: #0d1424; /* dark card/navbar background */
+  --color-surface-lighter: #1a2744; /* borders, dividers */
+
+  --color-text: #f1f5f9;          /* slate-100: primary text */
+  --color-text-muted: #8fa8c8;    /* slightly brighter — readable on ultra-dark */
+  --color-text-dim: #546a87;      /* subtle text */
+}
+
+/* ─── Base resets ───────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  /* NOTE: scroll-behavior:smooth intentionally removed — Lenis handles smooth scrolling */
+  scroll-padding-top: 80px;    /* Compensate for fixed navbar height */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;          /* System UI renders correctly on dark bg */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  line-height: 1.75;           /* More open — easier to read */
+  overflow-x: hidden;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;  /* OpenType polish */
+  font-optical-sizing: auto;
+}
+
+/* ─── Headings — tight tracking for editorial premium feel ─── */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+/* Hide scrollbar completely to enhance immersive 3D experience */
+::-webkit-scrollbar { 
+  display: none; 
+}
+html {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* ─── Selection ─────────────────────────────────────────────── */
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+}
+
+/* ─── Focus visible (keyboard accessibility) ─────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/*
+ * Reusable container — balanced max-width and responsive padding.
+ * Applied to all sections, Navbar, and Footer.
+ */
+.container-main {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .container-main {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-main {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-main {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+/* ─── Section heading divider — fades to transparent on right ─ */
+.section-divider {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, var(--color-surface-lighter), transparent);
+  border-radius: 999px;
+}
+
+/* ─── Fluid hero headline — scales from mobile to 4K ────────── */
+.hero-headline {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+/* ─── Scroll indicator bounce animation ──────────────────────── */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50%       { transform: translateY(6px); opacity: 0.4; }
+}
+
+.scroll-indicator {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+/* ─── Ambient background glow orbs ──────────────────────────── */
+/* Positioned via App.tsx wrapper — creates depth behind particles */
+.bg-surface {
+  background-color: var(--color-surface);
+  /* Violet-dominant depth — primary glow top-left, cyan accent bottom-right */
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 15%, rgba(168, 85, 247, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 55% at 85% 85%, rgba(6, 182, 212, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 80% at 50% 50%, rgba(6, 9, 18, 0) 0%, rgba(3, 5, 12, 0.6) 100%);
+}
+
+/* ─── Floating HUD Button Animation ──────────────────────────── */
+@keyframes hud-float {
+  0%, 100% { 
+    transform: translateY(0); 
+    box-shadow: 0 0 5px rgba(6, 182, 212, 0.1);
+  }
+  50% { 
+    transform: translateY(-4px); 
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+  }
+}
+
+.animate-hud-float {
+  animation: hud-float 3.5s ease-in-out infinite;
+  /* Promote to GPU composite layer — prevents layout thrash during animation */
+  will-change: transform, box-shadow;
+}
+
+/* Promote scroll indicator to GPU layer for smooth bounce animation */
+.scroll-indicator {
+  will-change: transform;
+}
+
+/* ─── Mobile performance rules ───────────────────────────────── */
+/* backdrop-blur is extremely expensive on mobile GPUs — disable on small screens */
+@media (max-width: 767px) {
+  .backdrop-blur-xl,
+  .backdrop-blur-md,
+  .backdrop-blur-sm {
+    /* Override Tailwind backdrop blur on mobile — saves significant GPU memory bandwidth */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* ─── Touch interaction optimization ─────────────────────────── */
+/* Tell browser which elements scroll horizontally so it doesn't guess */
+.slider-container {
+  touch-action: pan-x;
+}
+
+/* Sections only scroll vertically */
+section {
+  touch-action: pan-y;
+  /* Isolate layout and paint cycles for each section — prevents browser-wide repaints */
+  contain: paint layout;
+}
+
+/* ─── Image optimization ──────────────────────────────────────── */
+/* High-quality scaling for the profile image */
+img {
+  image-rendering: auto;
+  /* Prevent layout shift during image load */
+  content-visibility: auto;
+}

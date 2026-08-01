@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Exclude URL parameters from indexing (often causes duplicate content in SPAs)
+Disallow: /*?*
+
+# Replace with your actual domain later
+# Sitemap: https://yourdomain.com/sitemap.xml

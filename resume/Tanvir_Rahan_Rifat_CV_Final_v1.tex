@@ -1,0 +1,166 @@
+\documentclass[letterpaper,10.5pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.6in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-.55in}
+\addtolength{\textheight}{1.2in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-6pt}]
+
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \vspace{6pt}\item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}, topsep=0pt]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}\vspace{-3pt}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[topsep=2pt, itemsep=0pt, parsep=0pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape Tanvir Rahan Rifat} \\ \vspace{5pt}
+    \small Dhaka, Bangladesh $|$ \href{mailto:tanvirrahanrifat@gmail.com}{\underline{tanvirrahanrifat@gmail.com}} $|$ (+880) 1575306583 \\ \vspace{2pt}
+    \href{https://tanvirrifat.me/}{\underline{Portfolio}} $|$ 
+    \href{https://www.linkedin.com/in/tanvirrahanrifat/}{\underline{LinkedIn}} $|$
+    \href{https://github.com/tanvirRahan}{\underline{GitHub}}
+\end{center}
+
+%-----------PROFILE-----------
+\section{Profile}
+\small{I'm a Computer Science and Engineering graduate from the University of Asia Pacific currently working as a Full-Stack Developer Intern at Eutropia IT. My engineering work spans across backend architecture, machine learning, data automation, and responsive frontend development. My core focus is on building clean APIs, managing system resources, and deploying scalable live applications that solve real-world problems efficiently.}
+
+%-----------SKILLS-----------
+\section{Skills}
+\begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Programming Languages}{: Python, JavaScript, TypeScript, C, C++, Java} \\
+     \textbf{Databases}{: PostgreSQL, MySQL, SQLite} \\
+     \textbf{Frameworks \& Libraries}{: Next.js, React.js, Django, Django REST Framework, Celery, pandas, scikit-learn, XGBoost, LightGBM, Three.js (React Three Fiber), Tailwind CSS, GSAP} \\
+     \textbf{Machine Learning \& Automation}{: Groq API, Meta Stacking (Ensembles), NLP, TF-IDF, Data Automation, ETL Pipelines, Prompt Engineering (Claude, Copilot)} \\
+     \textbf{Tools \& Platforms}{: Docker, Nginx, Redis, Git, GitHub, Azure, Cloudinary, Streamlit}
+    }}
+\end{itemize}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of Asia Pacific}{July 2026}
+      {B.Sc. in Computer Science and Engineering}{Dhaka, Bangladesh}
+      \resumeItemListStart
+        \resumeItem{\textbf{Thesis:} A Data-Driven Framework for Career Recommendation and Competency Mapping to Bridge the Industry-Academia Gap. \textit{Investigated the "CGPA Paradox" by quantitatively mapping 3,700+ student profiles against real-time industry demands using Cosine Similarity.}}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Full-Stack Developer Intern}{Feb 2026 -- Present}
+      {Eutropia IT}{Dhaka, Bangladesh}
+      \resumeItemListStart
+        \resumeItem{Built an end-to-end media processing platform \href{https://yankvid.me/}{\textbf{(YankVid.me)}} using Next.js and Django, actively handling real-world user traffic and background processing via Celery and Redis.}
+        \resumeItem{Managed full-cycle deployments on Azure VMs using Docker and NGINX, implementing automated cookie rotation and failover mechanisms to maintain high availability under concurrent load.}
+        \resumeItem{Automated internal administrative workflows by developing Python scripts for dynamic document generation (letters and certificates), reducing processing time to under 30 seconds.}
+        \resumeItem{Architected and maintained scalable REST APIs backed by PostgreSQL, ensuring secure authentication and strict data validation for seamless frontend integration.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{CareerOS -- ML Career Prediction System} $|$ \href{https://github.com/tanvirRahan/industry-academia-alignment}{\faGithub}}{}
+          \resumeItemListStart
+            \resumeItem{Engineered an end-to-end machine learning pipeline to bridge academic profiles with industry skill taxonomies, benchmarking multiple models to achieve 87.05\% prediction accuracy via a Stacking Ensemble.}
+            \resumeItem{Designed a dynamic Streamlit dashboard featuring interactive Plotly radar charts for deep competency gap analysis and career path visualization.}
+            \resumeItem{\textbf{Tools Used:} Python, Scikit-Learn, Random Forest, XGBoost, LightGBM, Streamlit, Pandas, Plotly}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+          {\textbf{Topnoz -- AI-Powered E-Commerce Platform} $|$ \href{https://github.com/tanvirRahan/Topnoz}{\faGithub}}{}
+          \resumeItemListStart
+            \resumeItem{Architected a production-ready e-commerce platform integrating a secure transactional backend with a custom multilingual conversational AI agent (TARS'BOT) for intelligent product discovery.}
+            \resumeItem{Implemented frictionless user onboarding via Google OAuth 2.0, fully decoupled edge-cached media delivery, and optimized request handling for high concurrency.}
+            \resumeItem{\textbf{Tools Used:} Django, PostgreSQL, Groq API, Cloudinary, Google OAuth, Gunicorn}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+          {\textbf{Job Market Analysis Pipeline} $|$ \href{https://github.com/tanvirRahan/Automated-Job-Data-Pipeline}{\faGithub}}{}
+          \resumeItemListStart
+            \resumeItem{Engineered a high-performance, asynchronous web scraper to aggregate 5,000+ raw job listings, cleaning and filtering them into a validated dataset for machine learning research.}
+            \resumeItem{Applied TF-IDF algorithms and NLP feature engineering for precise technical and soft skill extraction.}
+            \resumeItem{\textbf{Tools Used:} Python, AsyncIO, aiohttp, Pandas, TF-IDF, NLP}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+%-----------CERTIFICATIONS & ACHIEVEMENTS-----------
+\section{Certifications \& Achievements}
+  \begin{itemize}[leftmargin=0.15in, label={$\vcenter{\hbox{\tiny$\bullet$}}$}, topsep=2pt, itemsep=0pt]
+      \resumeItem{\textbf{Earned a Full-Stack Developer Certification} from Eutropia IT, validating practical expertise in building modern, scalable web applications.}
+      \resumeItem{\textbf{Completed a verified Data Analysis with Python certification}, gaining foundational knowledge in data manipulation and statistical analysis.}
+      \resumeItem{\textbf{Actively participated in the Intra-University Programming Olympiad} and various problem-solving contests, demonstrating strong competitive programming and algorithmic skills.}
+      \resumeItem{\textbf{Participated in an Artificial Intelligence Seminar} at BFEW Technical Training Center, exploring advanced AI concepts under the guidance of industry experts.}
+  \end{itemize}
+
+\end{document}
