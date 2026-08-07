@@ -1,98 +1,131 @@
-import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import { useState, useEffect, useRef } from 'react'
 
-/** Navigation links configuration. */
+/** Full nav order: Home → About → Experience → Skills → Projects → Achievements → Contact */
 const NAV_LINKS = [
-  { label: 'Home', href: '#hero' },
-  { label: 'About', href: '#about' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home',         href: '#home' },
+  { label: 'About',        href: '#about' },
+  { label: 'Experience',   href: '#experience' },
+  { label: 'Skills',       href: '#skills' },
+  { label: 'Projects',     href: '#work' },
+  { label: 'Achievements', href: '#achievements' },
+  { label: 'Contact',      href: '#contact' },
 ] as const
 
-/** Fixed navbar with glassmorphism, scroll detection, and mobile menu. */
+/** Sticky editorial navbar — scrollspy, mobile menu. */
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [isOpen, setIsOpen]     = useState(false)
+  const [activeId, setActiveId] = useState('home')
+  const linksRef = useRef<HTMLDivElement>(null)
 
-  /* Track scroll position to toggle background opacity. */
+  /* Scrollspy */
   useEffect(() => {
-    const handleScroll = () => {
-      // Guard: only update state when the boolean threshold actually changes
-      // Prevents a React re-render on every single scroll pixel
-      const scrolled = window.scrollY > 50
-      setIsScrolled((prev) => (prev === scrolled ? prev : scrolled))
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    const sections = document.querySelectorAll<HTMLElement>('section[id]')
+    if (!('IntersectionObserver' in window)) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActiveId(e.target.getAttribute('id') ?? '')
+        })
+      },
+      { rootMargin: '-20% 0px -70% 0px' } /* Trigger point at 20% from top */
+    )
+    sections.forEach((s) => io.observe(s))
+    return () => io.disconnect()
   }, [])
 
-  /* Smooth scroll to section and close mobile menu. */
-  const scrollTo = (href: string) => {
+  const handleLinkClick = (href: string) => {
     setIsOpen(false)
-    const el = document.querySelector(href)
-    el?.scrollIntoView({ behavior: 'smooth' })
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
-    <header
-      id="navbar"
-      className={cn(
-        'fixed top-0 left-0 w-full z-50 transition-all duration-300',
-        isScrolled
-          ? 'bg-surface/80 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/10'
-          : 'bg-transparent'
-      )}
-    >
-      <nav className="container-main flex items-center justify-end py-4 pointer-events-none">
-        {/* Desktop links - Futuristic Cyan HUD style */}
-        <ul className="hidden md:flex items-center gap-6 pointer-events-auto">
-          {NAV_LINKS.map(({ label, href }, index) => (
-            <li key={href}>
+    <>
+      <nav
+        id="navbar"
+        style={{
+          position: 'sticky', top: 0, zIndex: 50,
+          background: 'rgba(234, 230, 219, 0.88)', /* Match Soft Oatmeal background */
+          backdropFilter: 'blur(10px)',
+          borderBottom: '1px solid var(--color-line)',
+        }}
+      >
+        <div className="wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '2rem', height: '68px' }}>
+
+          {/* Desktop nav links */}
+          <div
+            ref={linksRef}
+            id="navLinks"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontFamily: 'var(--font-mono)', fontSize: '11.5px', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+            className="nav-links-desktop"
+          >
+            {NAV_LINKS.map(({ label, href }, idx) => {
+              const id = href.slice(1)
+              const isActive = activeId === id
+              return (
+                <div key={href} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  {/* Dot separator before active item */}
+                  <span style={{ color: 'var(--color-accent)', fontSize: '8px', opacity: isActive ? 1 : 0, transition: 'opacity .2s', userSelect: 'none', marginRight: '2px' }}>•</span>
+                  <a
+                    href={href}
+                    onClick={(e) => { e.preventDefault(); handleLinkClick(href) }}
+                    style={{
+                      position: 'relative',
+                      color: isActive ? 'var(--color-ink)' : 'var(--color-muted)',
+                      padding: '3px 2px',
+                      transition: 'color .2s ease',
+                      display: 'inline-block',
+                      whiteSpace: 'nowrap',
+                    }}
+                    className="nav-link"
+                  >
+                    {label}
+                    <span style={{ position: 'absolute', left: 0, bottom: 0, height: '1px', background: 'var(--color-accent)', transition: 'width .25s ease', width: isActive ? '100%' : '0' }} />
+                  </a>
+                  <span style={{ color: 'var(--color-accent)', fontSize: '8px', opacity: isActive ? 1 : 0, transition: 'opacity .2s', userSelect: 'none', marginLeft: '2px' }}>•</span>
+                  {/* Separator between items — except last */}
+                  {idx < NAV_LINKS.length - 1 && (
+                    <span style={{ color: 'var(--color-line)', fontSize: '14px', marginLeft: '2px', userSelect: 'none' }}>|</span>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Mobile toggle */}
+          <button
+            id="navToggle"
+            onClick={() => setIsOpen(!isOpen)}
+            style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-ink)' }}
+            className="nav-toggle"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? 'Close ✕' : 'Menu ☰'}
+          </button>
+        </div>
+
+        {/* Mobile dropdown */}
+        {isOpen && (
+          <div style={{ background: 'var(--color-base)', borderBottom: '1px solid var(--color-line)' }}>
+            {NAV_LINKS.map(({ label, href }) => (
               <a
+                key={href}
                 href={href}
-                onClick={(e) => { e.preventDefault(); scrollTo(href) }}
-                className="animate-hud-float relative flex items-center justify-center rounded-full border border-secondary/30 bg-surface-light/50 backdrop-blur-md px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-secondary/90 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-1 hover:border-secondary hover:bg-secondary/20 hover:text-white hover:shadow-[0_0_20px_rgba(6,182,212,0.6)]"
-                style={{ animationDelay: `${index * 0.15}s` }}
+                onClick={(e) => { e.preventDefault(); handleLinkClick(href) }}
+                style={{ display: 'block', padding: '0.9rem 2rem', borderBottom: '1px solid var(--color-line)', fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-muted)' }}
               >
                 {label}
               </a>
-            </li>
-          ))}
-        </ul>
-
-        {/* Mobile toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-text-muted transition-colors hover:text-primary cursor-pointer pointer-events-auto"
-          aria-label="Toggle menu"
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+            ))}
+          </div>
+        )}
       </nav>
 
-      {/* Mobile menu */}
-      <div
-        className={cn(
-          'md:hidden overflow-hidden transition-all duration-300 bg-surface/95 backdrop-blur-xl',
-          isOpen ? 'max-h-80 border-b border-white/5' : 'max-h-0'
-        )}
-      >
-        <ul className="flex flex-col gap-1 px-6 py-4">
-          {NAV_LINKS.map(({ label, href }) => (
-            <li key={href}>
-              <a
-                href={href}
-                onClick={(e) => { e.preventDefault(); scrollTo(href) }}
-                className="block rounded-lg px-4 py-3 text-sm font-medium text-text-muted transition-colors hover:bg-surface-light hover:text-primary"
-              >
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </header>
+      <style>{`
+        @media (max-width: 900px) { .cmdk-hint { display: none !important; } }
+        @media (max-width: 780px) { .nav-links-desktop { display: none !important; } .nav-toggle { display: block !important; } }
+        .nav-link:hover { color: var(--color-ink) !important; }
+        .nav-link:hover span { width: 100% !important; }
+      `}</style>
+    </>
   )
 }

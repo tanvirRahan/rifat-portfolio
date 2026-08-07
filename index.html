@@ -3,61 +3,58 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="description" content="Tanvir Rahan Rifat — Full-Stack Developer. React, TypeScript, Three.js, Django, PostgreSQL." />
+    <meta name="description" content="Tanvir Rahan Rifat — Full-Stack Developer & ML Engineer. Building production software, AI models, and automated data pipelines." />
 
-    <!-- Mobile browser chrome color — matches surface background -->
-    <meta name="theme-color" content="#060912" />
+    <!-- Mobile browser chrome color — matches Soft Oatmeal background -->
+    <meta name="theme-color" content="#EAE6DB" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
-    <!-- Open Graph / Social Sharing (Facebook, LinkedIn) -->
-    <meta property="og:title" content="Tanvir Rahan Rifat | Full-Stack Developer Portfolio" />
-    <meta property="og:description" content="Immersive 3D Developer Portfolio built with React, Three.js, and Tailwind CSS. Showcasing Full-Stack projects and Backend Architecture." />
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:title" content="Tanvir Rahan Rifat | Developer Portfolio" />
+    <meta property="og:description" content="Full-Stack Developer & ML Engineer building production software, AI models, and automated pipelines." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://tanvirrifat.me/" />
     <meta property="og:image" content="https://tanvirrifat.me/og-image.jpg" />
 
-    <!-- Twitter Card for Twitter/X Sharing -->
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Tanvir Rahan Rifat | Developer Portfolio" />
-    <meta name="twitter:description" content="Immersive 3D Developer Portfolio built with React, Three.js, and Tailwind CSS." />
+    <meta name="twitter:description" content="Full-Stack Developer & ML Engineer — software, AI, automation." />
     <meta name="twitter:image" content="https://tanvirrifat.me/og-image.jpg" />
 
-    <!-- Canonical URL (Prevents duplicate content issues for SEO) -->
+    <!-- Canonical URL -->
     <link rel="canonical" href="https://tanvirrifat.me/" />
 
     <!-- SEO Keywords -->
-    <meta name="keywords" content="Tanvir Rahan Rifat, Rifat Portfolio, Full-Stack Developer, Frontend Developer, Backend Developer, React, Three.js, WebGL, Dhaka, Bangladesh, Django, Python" />
+    <meta name="keywords" content="Tanvir Rahan Rifat, Rifat Portfolio, Full-Stack Developer, ML Engineer, Django, React, Python, Bangladesh" />
 
+    <link rel="icon" type="image/jpeg" href="/profile.jpg" />
+    <title>Tanvir Rahan Rifat</title>
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Rifat | Developer Portfolio</title>
-
-    <!-- Prevent white flash before React/Fonts load -->
+    <!-- Prevent flash before React loads — match Soft Oatmeal background -->
     <style>
       html, body {
-        background-color: #060912 !important; /* Match var(--color-surface) */
+        background-color: #EAE6DB !important;
         margin: 0;
         padding: 0;
       }
     </style>
 
-    <!-- Google Font: Inter — non-render-blocking load pattern -->
+    <!-- Google Fonts: Fraunces (display serif) + Inter (body) + JetBrains Mono (mono) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- media="print" trick: browser loads font without blocking rendering, then switches to all -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
     />
-    <!-- Fallback for no-JS -->
     <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     </noscript>
   </head>
-  <body style="background-color: #060912; margin: 0; padding: 0;">
+  <body style="background-color: #FAF7EF; margin: 0; padding: 0;">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

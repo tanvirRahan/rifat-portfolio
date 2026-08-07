@@ -1,34 +1,44 @@
 @import "tailwindcss";
 
 /*
- * Design System — Custom Theme Tokens
- * ====================================
- * Tailwind v4 uses @theme to define custom design tokens.
- * These become usable as utility classes: bg-primary, text-accent, etc.
+ * Design System — Swiss Editorial Theme Tokens
+ * =============================================
+ * Matches portfolio-prototype.html exactly.
+ * Color palette: cream base, dark ink, single red accent.
  */
 
 @theme {
-  /* Typography */
+  /* Fonts */
+  --font-display: 'Fraunces', 'Georgia', serif;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  /* Color tokens */
+  --color-ink: #1C1917;
+  /* Deepest Charcoal text */
+  --color-body: #1C1917;
+  /* Body text (high contrast) */
+  --color-muted: #44403C;
+  /* Labels, captions, nav links (darker for clarity) */
+  --color-line: #D6D3D1;
+  /* Borders, dividers */
+  --color-surface: #E0DDD4;
+  /* Card hover, subtle fills */
+  --color-base: #EAE6DB;
+  /* Soft Oatmeal background */
+  --color-accent: #C27A60;
+  /* Terracotta accent for hovers */
 
-  /* Brand colors — neon violet dark palette */
-  --color-primary: #a855f7;       /* purple-500: main accent */
-  --color-primary-light: #c084fc; /* purple-400: hover states */
-  --color-primary-dark: #9333ea;  /* purple-600: pressed states */
-
-  --color-secondary: #06b6d4;     /* cyan-500: secondary accent */
-  --color-secondary-light: #22d3ee;
-
-  --color-surface: #060912;       /* ultra-dark: main background */
-  --color-surface-light: #0d1424; /* dark card/navbar background */
-  --color-surface-lighter: #1a2744; /* borders, dividers */
-
-  --color-text: #f1f5f9;          /* slate-100: primary text */
-  --color-text-muted: #8fa8c8;    /* slightly brighter — readable on ultra-dark */
-  --color-text-dim: #546a87;      /* subtle text */
+  /* Spacing */
+  --spacing-1: 8px;
+  --spacing-2: 16px;
+  --spacing-3: 24px;
+  --spacing-4: 32px;
+  --spacing-6: 48px;
+  --spacing-8: 64px;
+  --spacing-12: 96px;
+  --spacing-16: 128px;
 }
 
-/* ─── Base resets ───────────────────────────────────────────── */
+/* ─── Resets ──────────────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -38,40 +48,461 @@
 }
 
 html {
-  /* NOTE: scroll-behavior:smooth intentionally removed — Lenis handles smooth scrolling */
-  scroll-padding-top: 80px;    /* Compensate for fixed navbar height */
+  scroll-padding-top: 76px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color-scheme: dark;          /* System UI renders correctly on dark bg */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-surface);
-  color: var(--color-text);
-  line-height: 1.75;           /* More open — easier to read */
+  background-color: var(--color-base);
+  color: var(--color-body);
+  line-height: 1.85; /* Increased for breathing room */
   overflow-x: hidden;
-  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;  /* OpenType polish */
-  font-optical-sizing: auto;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
 }
 
-/* ─── Headings — tight tracking for editorial premium feel ─── */
-h1, h2, h3, h4, h5, h6 {
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  font-feature-settings: 'kern' 1, 'liga' 1;
+/* ─── Eye Care Filter (Vignette) ─────────────────────── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+  pointer-events: none;
+  /* Cinematic Vignette: Soft inner shadow reduces edge brightness */
+  box-shadow: inset 0 0 140px rgba(41, 37, 36, 0.05);
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ─── Selection ──────────────────────────────────────────────── */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-base);
+}
+
+/* ─── Focus ──────────────────────────────────────────────────── */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ─── Container ──────────────────────────────────────────────── */
+.wrap {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+@media (min-width: 768px) {
+  .wrap {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+/* Keep old .container-main working during transition */
+.container-main {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+/* ─── Section shared styles ──────────────────────────────────── */
+section {
+  scroll-margin-top: 76px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Big watermark section number — e.g. "01" behind content */
+section[data-num]::before {
+  content: attr(data-num);
+  position: absolute;
+  top: -0.12em;
+  right: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(140px, 20vw, 340px);
+  line-height: 1;
+  color: var(--color-ink);
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+}
+
+section[data-num] .wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.section-pad {
+  padding-top: var(--spacing-12);
+  padding-bottom: var(--spacing-12);
+}
+
+@media (max-width: 720px) {
+  .section-pad {
+    padding-top: var(--spacing-8);
+    padding-bottom: var(--spacing-8);
+  }
+}
+
+.hairline-top {
+  border-top: 1px solid var(--color-line);
+}
+
+/* ─── Section head typography ────────────────────────────────── */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0.5rem;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--color-accent);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.section-head {
+  margin-bottom: 4rem;
+}
+
+.section-head h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(30px, 4vw, 52px);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+/* ─── Reveal animation (scroll-triggered) ────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ─── Buttons ────────────────────────────────────────────────── */
+.btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 16px 28px;
+  border: 1px solid var(--color-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+  background: none;
+  will-change: transform;
+}
+
+.btn-primary {
+  background: var(--color-ink);
+  color: var(--color-base);
+}
+
+.btn-primary:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.btn-ghost {
+  color: var(--color-ink);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* ─── Skill pills ────────────────────────────────────────────── */
+.skill-pill {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-body);
+  border: 1px solid var(--color-line);
+  padding: 8px 16px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.skill-pill:hover {
+  border-color: var(--color-accent);
+  color: var(--color-ink);
+}
+
+/* ─── Scrollbar — hide for clean editorial look ─────────────── */
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ─── Scroll progress bar (top of page) ─────────────────────── */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--color-accent);
+  z-index: 100;
+  transition: width 0.1s linear;
+}
+
+/* ─── Custom cursor ──────────────────────────────────────────── */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: rgba(41, 37, 36, 0.65); /* Softer semi-transparent charcoal */
+  backdrop-filter: blur(2px);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease, height 0.25s ease, background 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursor-dot.hover {
+  width: 56px;
+  height: 56px;
+  background: var(--color-accent);
+}
+
+.cursor-dot span {
+  opacity: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--color-base);
+  text-transform: uppercase;
+  transition: opacity 0.15s ease;
+}
+
+.cursor-dot.hover span {
+  opacity: 1;
+}
+
+@media (hover: none),
+(pointer: coarse) {
+  .cursor-dot {
+    display: none;
+  }
+}
+
+/* ─── Grain texture overlay ──────────────────────────────────── */
+@keyframes cinematic-noise {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  10% {
+    transform: translate(-2%, -2%);
+  }
+
+  20% {
+    transform: translate(-4%, 2%);
+  }
+
+  30% {
+    transform: translate(2%, -4%);
+  }
+
+  40% {
+    transform: translate(-2%, 6%);
+  }
+
+  50% {
+    transform: translate(-4%, 2%);
+  }
+
+  60% {
+    transform: translate(6%, 0);
+  }
+
+  70% {
+    transform: translate(0, 6%);
+  }
+
+  80% {
+    transform: translate(-6%, 0);
+  }
+
+  90% {
+    transform: translate(4%, 2%);
+  }
+
+  100% {
+    transform: translate(2%, 0);
+  }
+}
+
+.grain {
+  position: fixed;
+  top: -20vh;
+  left: -20vw;
+  width: 140vw;
+  height: 140vh;
+  z-index: 0;
+  /* Changed from 200 to 0 to sit behind text */
+  pointer-events: none;
+  opacity: 0.035;
+  /* Softer opacity */
+  mix-blend-mode: multiply;
+  animation: cinematic-noise 6s steps(10) infinite;
+}
+
+/* ─── Frame overlay (gallery margin aesthetic) ───────────────── */
+.frame-overlay {
+  position: fixed;
+  inset: 12px;
+  border: 1px solid rgba(41, 37, 36, 0.06); /* Softer eye-friendly border */
+  border-radius: 6px;
+  z-index: 150;
+  pointer-events: none;
+}
+
+.frame-tag {
+  position: fixed;
+  z-index: 150;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.frame-tag.tl {
+  top: 24px;
+  left: 28px;
+}
+
+.frame-tag.br {
+  bottom: 24px;
+  right: 28px;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+
+  .frame-overlay,
+  .frame-tag {
+    display: none;
+  }
+}
+
+/* ─── Status pill pulse ──────────────────────────────────────── */
+@keyframes status-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* ─── Hero line reveal ───────────────────────────────────────── */
+@keyframes rise-up {
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-line span {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-sub,
+  .hero-cta {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
+
 
 /* ─── Scrollbar ─────────────────────────────────────────────── */
 /* Hide scrollbar completely to enhance immersive 3D experience */
-::-webkit-scrollbar { 
-  display: none; 
+::-webkit-scrollbar {
+  display: none;
 }
+
 html {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* ─── Selection ─────────────────────────────────────────────── */
@@ -143,8 +574,17 @@ html {
 
 /* ─── Scroll indicator bounce animation ──────────────────────── */
 @keyframes scroll-bounce {
-  0%, 100% { transform: translateY(0); opacity: 1; }
-  50%       { transform: translateY(6px); opacity: 0.4; }
+
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateY(6px);
+    opacity: 0.4;
+  }
 }
 
 .scroll-indicator {
@@ -164,12 +604,15 @@ html {
 
 /* ─── Floating HUD Button Animation ──────────────────────────── */
 @keyframes hud-float {
-  0%, 100% { 
-    transform: translateY(0); 
+
+  0%,
+  100% {
+    transform: translateY(0);
     box-shadow: 0 0 5px rgba(6, 182, 212, 0.1);
   }
-  50% { 
-    transform: translateY(-4px); 
+
+  50% {
+    transform: translateY(-4px);
     box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
   }
 }
@@ -188,6 +631,7 @@ html {
 /* ─── Mobile performance rules ───────────────────────────────── */
 /* backdrop-blur is extremely expensive on mobile GPUs — disable on small screens */
 @media (max-width: 767px) {
+
   .backdrop-blur-xl,
   .backdrop-blur-md,
   .backdrop-blur-sm {
@@ -216,4 +660,83 @@ img {
   image-rendering: auto;
   /* Prevent layout shift during image load */
   content-visibility: auto;
+}
+
+/* ─── Kinetic Text (Hover Animations) ────────────────────────── */
+.kinetic-text {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s ease, letter-spacing 0.3s ease;
+  will-change: transform;
+}
+
+.kinetic-text:hover {
+  transform: translateY(-4px);
+  color: var(--color-accent) !important;
+  font-style: italic;
+  letter-spacing: 0.06em;
+}
+
+/* ─── Premium Photo Hover ────────────────────────────────────── */
+.kinetic-photo {
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s ease;
+  will-change: transform, box-shadow;
+}
+
+.kinetic-photo:hover {
+  transform: translateY(-16px) rotate(-3deg) scale(1.02);
+  box-shadow: 24px 48px 64px -16px rgba(0, 0, 0, 0.18) !important;
+}
+
+.kinetic-photo img {
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.kinetic-photo:hover img {
+  transform: scale(1.1);
+}
+
+/* ─── Responsive Media Queries (Mobile & Tablets) ────────────── */
+@media (max-width: 900px) {
+  /* Hero Section Optimization */
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    text-align: center;
+    gap: 3rem !important;
+    padding-top: 2rem;
+  }
+  .hero-grid > div:first-child {
+    align-items: center !important;
+  }
+  .hero-title {
+    font-size: clamp(64px, 16vw, 90px) !important;
+  }
+  .hero-sub {
+    font-size: 11px !important;
+    text-align: center;
+    margin-bottom: 2rem !important;
+  }
+  .hero-grid .kinetic-text, .hero-grid .kinetic-photo {
+    /* Disable some dramatic hover effects on mobile for better touch experience */
+    transform: none !important;
+  }
+
+  /* About Section Optimization */
+  .about-grid {
+    grid-template-columns: 1fr !important;
+    gap: 3rem !important;
+  }
+  .about-grid > div:first-child {
+    /* Limit image size on mobile */
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  /* Global Adjustments */
+  .wrap {
+    padding: 0 6vw !important;
+  }
+  .section-pad {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+  }
 }

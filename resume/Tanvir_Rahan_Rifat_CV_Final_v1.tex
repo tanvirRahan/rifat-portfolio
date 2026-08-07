@@ -23,8 +23,8 @@
 \addtolength{\oddsidemargin}{-0.6in}
 \addtolength{\evensidemargin}{-0.6in}
 \addtolength{\textwidth}{1.2in}
-\addtolength{\topmargin}{-.55in}
-\addtolength{\textheight}{1.2in}
+\addtolength{\topmargin}{-.65in}
+\addtolength{\textheight}{1.3in}
 
 \urlstyle{same}
 
@@ -53,7 +53,7 @@
 }
 
 \newcommand{\resumeProjectHeading}[2]{
-    \vspace{6pt}\item
+    \vspace{3pt}\item
     \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
       \small#1 & #2 \\
     \end{tabular*}\vspace{-6pt}
@@ -77,6 +77,7 @@
 %----------HEADING----------
 \begin{center}
     \textbf{\Huge \scshape Tanvir Rahan Rifat} \\ \vspace{5pt}
+    \small \textbf{Software Developer $|$ ML Engineer $|$ AI \& Data Automation} \\ \vspace{3pt}
     \small Dhaka, Bangladesh $|$ \href{mailto:tanvirrahanrifat@gmail.com}{\underline{tanvirrahanrifat@gmail.com}} $|$ (+880) 1575306583 \\ \vspace{2pt}
     \href{https://tanvirrifat.me/}{\underline{Portfolio}} $|$ 
     \href{https://www.linkedin.com/in/tanvirrahanrifat/}{\underline{LinkedIn}} $|$
@@ -91,11 +92,11 @@
 \section{Skills}
 \begin{itemize}[leftmargin=0.15in, label={}]
     \small{\item{
-     \textbf{Programming Languages}{: Python, JavaScript, TypeScript, C, C++, Java} \\
-     \textbf{Databases}{: PostgreSQL, MySQL, SQLite} \\
-     \textbf{Frameworks \& Libraries}{: Next.js, React.js, Django, Django REST Framework, Celery, pandas, scikit-learn, XGBoost, LightGBM, Three.js (React Three Fiber), Tailwind CSS, GSAP} \\
-     \textbf{Machine Learning \& Automation}{: Groq API, Meta Stacking (Ensembles), NLP, TF-IDF, Data Automation, ETL Pipelines, Prompt Engineering (Claude, Copilot)} \\
-     \textbf{Tools \& Platforms}{: Docker, Nginx, Redis, Git, GitHub, Azure, Cloudinary, Streamlit}
+     \textbf{Languages \& Core}{: Python, JavaScript, TypeScript, C, C++, Java, DSA} \\
+     \textbf{Backend \& Web Auth}{: Django, Django Ninja, Django REST Framework, Celery, Redis, REST API Design, JWT, OAuth 2.0} \\
+     \textbf{Frontend}{: Next.js, React, Tailwind CSS, GSAP, Lenis, Vite} \\
+     \textbf{AI, ML \& Automation}{: Scikit-learn, XGBoost, LightGBM, Pandas, NLP, Meta Stacking, Groq API, Python Automation, Async ETL Pipelines} \\
+     \textbf{Databases \& DevOps}{: PostgreSQL, MySQL, SQLite, Docker, Nginx, Git/GitHub, CI/CD, Azure, Cloudinary}
     }}
 \end{itemize}
 
@@ -121,6 +122,7 @@
         \resumeItem{Built an end-to-end media processing platform \href{https://yankvid.me/}{\textbf{(YankVid.me)}} using Next.js and Django, actively handling real-world user traffic and background processing via Celery and Redis.}
         \resumeItem{Managed full-cycle deployments on Azure VMs using Docker and NGINX, implementing automated cookie rotation and failover mechanisms to maintain high availability under concurrent load.}
         \resumeItem{Automated internal administrative workflows by developing Python scripts for dynamic document generation (letters and certificates), reducing processing time to under 30 seconds.}
+        \resumeItem{Engineered an adaptive restaurant ordering system using Python and Tkinter, architecting a responsive UI with custom animation logic and a dynamic side-drawer.}
         \resumeItem{Architected and maintained scalable REST APIs backed by PostgreSQL, ensuring secure authentication and strict data validation for seamless frontend integration.}
       \resumeItemListEnd
 
@@ -130,7 +132,15 @@
 \section{Projects}
     \resumeSubHeadingListStart
       \resumeProjectHeading
-          {\textbf{CareerOS -- ML Career Prediction System} $|$ \href{https://github.com/tanvirRahan/industry-academia-alignment}{\faGithub}}{}
+          {\textbf{Topnoz -- AI-Native Commerce Platform} $|$ \href{https://github.com/tanvirRahan/Topnoz}{\faGithub} $|$ \href{https://topnoz-lac.vercel.app/}{\faLink}}{}
+          \resumeItemListStart
+            \resumeItem{Built a fully decoupled, API-first e-commerce platform pairing a Next.js 16 frontend with secure REST APIs powered by Django Ninja and PostgreSQL.}
+            \resumeItem{Integrated TARS'BOT using the Groq LLM for real-time, context-aware product discovery, and fortified the backend with strict Pydantic payload validation.}
+            \resumeItem{\textbf{Tools Used:} Next.js, TypeScript, Django Ninja, PostgreSQL, Groq AI, Cloudinary, Google OAuth}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+          {\textbf{CareerOS -- Predictive ML Career Engine} $|$ \href{https://github.com/tanvirRahan/industry-academia-alignment}{\faGithub}}{}
           \resumeItemListStart
             \resumeItem{Engineered an end-to-end machine learning pipeline to bridge academic profiles with industry skill taxonomies, benchmarking multiple models to achieve 87.05\% prediction accuracy via a Stacking Ensemble.}
             \resumeItem{Designed a dynamic Streamlit dashboard featuring interactive Plotly radar charts for deep competency gap analysis and career path visualization.}
@@ -138,15 +148,7 @@
           \resumeItemListEnd
 
       \resumeProjectHeading
-          {\textbf{Topnoz -- AI-Powered E-Commerce Platform} $|$ \href{https://github.com/tanvirRahan/Topnoz}{\faGithub}}{}
-          \resumeItemListStart
-            \resumeItem{Architected a production-ready e-commerce platform integrating a secure transactional backend with a custom multilingual conversational AI agent (TARS'BOT) for intelligent product discovery.}
-            \resumeItem{Implemented frictionless user onboarding via Google OAuth 2.0, fully decoupled edge-cached media delivery, and optimized request handling for high concurrency.}
-            \resumeItem{\textbf{Tools Used:} Django, PostgreSQL, Groq API, Cloudinary, Google OAuth, Gunicorn}
-          \resumeItemListEnd
-
-      \resumeProjectHeading
-          {\textbf{Job Market Analysis Pipeline} $|$ \href{https://github.com/tanvirRahan/Automated-Job-Data-Pipeline}{\faGithub}}{}
+          {\textbf{Job Market Intelligence -- Automated ETL Pipeline} $|$ \href{https://github.com/tanvirRahan/Automated-Job-Data-Pipeline}{\faGithub}}{}
           \resumeItemListStart
             \resumeItem{Engineered a high-performance, asynchronous web scraper to aggregate 5,000+ raw job listings, cleaning and filtering them into a validated dataset for machine learning research.}
             \resumeItem{Applied TF-IDF algorithms and NLP feature engineering for precise technical and soft skill extraction.}
@@ -157,8 +159,8 @@
 %-----------CERTIFICATIONS & ACHIEVEMENTS-----------
 \section{Certifications \& Achievements}
   \begin{itemize}[leftmargin=0.15in, label={$\vcenter{\hbox{\tiny$\bullet$}}$}, topsep=2pt, itemsep=0pt]
-      \resumeItem{\textbf{Earned a Full-Stack Developer Certification} from Eutropia IT, validating practical expertise in building modern, scalable web applications.}
-      \resumeItem{\textbf{Completed a verified Data Analysis with Python certification}, gaining foundational knowledge in data manipulation and statistical analysis.}
+      \resumeItem{\textbf{Earned a Backend Developer Certification} from Eutropia IT, validating practical expertise in building scalable APIs and server-side architectures.}
+      \resumeItem{\textbf{Earned a UNICEF Certification in Data Analytics and Visualization}, demonstrating proficiency in transforming complex datasets into actionable business insights.}
       \resumeItem{\textbf{Actively participated in the Intra-University Programming Olympiad} and various problem-solving contests, demonstrating strong competitive programming and algorithmic skills.}
       \resumeItem{\textbf{Participated in an Artificial Intelligence Seminar} at BFEW Technical Training Center, exploring advanced AI concepts under the guidance of industry experts.}
   \end{itemize}

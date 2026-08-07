@@ -1,251 +1,515 @@
-import { useEffect, useState } from 'react'
-import type { Project } from '@/data/projects'
-import { X, ExternalLink, CheckCircle2 } from 'lucide-react'
-import Button from './Button'
-import { getTagColors } from '@/utils/tagColors'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-
-function GithubIcon({ size = 24 }: { size?: number }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.03c3.15-.38 6.5-1.4 6.5-7.17 0-1.5-.5-2.73-1.3-3.7.13-.32.6-1.74-.13-3.6 0 0-1.1-.35-3.6 1.35a12.8 12.8 0 0 0-6.6 0c-2.5-1.7-3.6-1.35-3.6-1.35-.73 1.86-.26 3.28-.13 3.6-.8.97-1.3 2.2-1.3 3.7 0 5.75 3.35 6.79 6.5 7.17A4.8 4.8 0 0 0 8 18v4"></path>
-    </svg>
-  )
-}
+import gsap from 'gsap'
+import type { Project } from '@/data/projects'
+import { useLenis } from 'lenis/react'
 
 interface ProjectModalProps {
-  project: Project | null
-  onClose: () => void
+  project: Project | null;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export default function ProjectModal({ project, onClose }: ProjectModalProps) {
-  const [isVisible, setIsVisible] = useState(false)
+export default function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
+  const overlayRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [hasScrolled, setHasScrolled] = useState(false)
 
+  // Reset image index when modal opens
   useEffect(() => {
-    if (project) {
-      setCurrentImageIndex(0) // Reset image index when a new project opens
-      setHasScrolled(false) // Reset scroll state
-      // Small delay to allow display:block to apply before animating opacity
-      requestAnimationFrame(() => setIsVisible(true))
-      // Lock background scroll
+    if (isOpen) setCurrentImageIndex(0)
+  }, [isOpen, project])
+
+  // Lock background scroll perfectly
+  const lenis = useLenis()
+  useEffect(() => {
+    if (isOpen) {
+      lenis?.stop()
+      // Fallback for mobile native scroll
       document.body.style.overflow = 'hidden'
+      document.body.style.touchAction = 'none'
     } else {
-      setIsVisible(false)
-      // Unlock background scroll
+      lenis?.start()
       document.body.style.overflow = ''
+      document.body.style.touchAction = ''
     }
+    return () => {
+      lenis?.start()
+      document.body.style.overflow = ''
+      document.body.style.touchAction = ''
+    }
+  }, [isOpen, lenis])
+
+  // Automatic slideshow interval
+  useEffect(() => {
+    if (!isOpen || !project || project.details.images.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentImageIndex(prev => (prev + 1) % project.details.images.length)
+    }, 3500)
+    return () => clearInterval(interval)
+  }, [isOpen, project])
+
+  /* Animated node-graph canvas for background */
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const overlay = overlayRef.current
+    if (!canvas || !overlay || !isOpen) return
+
+    const ctx = canvas.getContext('2d')!
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    type Node = { x: number; y: number; vx: number; vy: number }
+    let nodes: Node[] = []
+    let W = 0, H = 0
+    const mouse = { x: null as number | null, y: null as number | null }
+    let rafId: number
+
+    const resize = () => {
+      W = overlay.offsetWidth
+      H = overlay.offsetHeight
+      canvas.width = W * devicePixelRatio
+      canvas.height = H * devicePixelRatio
+      canvas.style.width = W + 'px'
+      canvas.style.height = H + 'px'
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0)
+      const count = Math.max(24, Math.floor((W * H) / 30000))
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.1, vy: (Math.random() - 0.5) * 0.1,
+      }))
+    }
+
+    const onMouseMove = (e: MouseEvent) => {
+      const r = overlay.getBoundingClientRect()
+      mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top
+    }
+    const onMouseLeave = () => { mouse.x = null; mouse.y = null }
+
+    window.addEventListener('resize', resize)
+    overlay.addEventListener('mousemove', onMouseMove)
+    overlay.addEventListener('mouseleave', onMouseLeave)
+
+    const LINK_DIST = 168
+    const LINE_COLOR = 'rgba(41, 37, 36, 0.1)' 
+    const NODE_COLOR = 'rgba(41, 37, 36, 0.25)' 
+
+    const draw = () => {
+      ctx.clearRect(0, 0, W, H)
+      for (const n of nodes) {
+        n.x += n.vx; n.y += n.vy
+        if (n.x < 0 || n.x > W) n.vx *= -1
+        if (n.y < 0 || n.y > H) n.vy *= -1
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = mouse.x - n.x, dy = mouse.y - n.y
+          const d = Math.sqrt(dx * dx + dy * dy)
+          if (d < 120) { n.x += dx / d * 0.5; n.y += dy / d * 0.5 }
+        }
+      }
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x
+          const dy = nodes[i].y - nodes[j].y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < LINK_DIST) {
+            ctx.strokeStyle = LINE_COLOR
+            ctx.globalAlpha = 1 - dist / LINK_DIST
+            ctx.lineWidth = 1.2
+            ctx.beginPath()
+            ctx.moveTo(nodes[i].x, nodes[i].y)
+            ctx.lineTo(nodes[j].x, nodes[j].y)
+            ctx.stroke()
+          }
+        }
+      }
+      ctx.globalAlpha = 1
+      ctx.fillStyle = NODE_COLOR
+      for (const n of nodes) {
+        ctx.beginPath()
+        ctx.arc(n.x, n.y, 2.5, 0, Math.PI * 2)
+        ctx.fill()
+      }
+      if (!reduceMotion) rafId = requestAnimationFrame(draw)
+    }
+
+    resize(); draw()
 
     return () => {
-      document.body.style.overflow = ''
+      window.removeEventListener('resize', resize)
+      overlay.removeEventListener('mousemove', onMouseMove)
+      overlay.removeEventListener('mouseleave', onMouseLeave)
+      cancelAnimationFrame(rafId)
     }
-  }, [project])
+  }, [isOpen])
 
-  // Auto-play Slider Effect (Crossfades every 5 seconds)
   useEffect(() => {
-    if (!project || project.images.length <= 1) return
+    if (isOpen && project) {
+      // Entry animations
+      const tl = gsap.timeline()
+      
+      tl.to(overlayRef.current, {
+        opacity: 1,
+        pointerEvents: 'auto',
+        duration: 0.4,
+        ease: 'power3.out'
+      })
+      
+      tl.fromTo(contentRef.current, 
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' },
+        "-=0.2"
+      )
 
-    const timer = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev === project.images.length - 1 ? 0 : prev + 1))
-    }, 5000)
+    } else {
+      // Exit animations
+      if (overlayRef.current) {
+        gsap.to(overlayRef.current, {
+          opacity: 0,
+          pointerEvents: 'none',
+          duration: 0.3,
+          ease: 'power3.in'
+        })
+      }
+    }
 
-    // Reset the timer if the user manually clicks next/prev (dependency array handles this)
-    return () => clearInterval(timer)
-  }, [project, currentImageIndex])
+    return () => {}
+  }, [isOpen, project])
 
-  const handleClose = () => {
-    setIsVisible(false)
-    // Wait for fade out animation before unmounting
-    setTimeout(() => onClose(), 300)
-  }
-
-  if (!project) return null
+  if (!project) return null;
 
   return createPortal(
-    <div
-      className={`fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12 transition-all duration-300 ${isVisible ? 'opacity-100 visible' : 'opacity-0 invisible'
-        }`}
+    <div 
+      ref={overlayRef}
+      data-lenis-prevent="true"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        background: 'rgba(250, 247, 239, 0.95)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        opacity: 0,
+        pointerEvents: 'none',
+      }}
     >
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/60 md:backdrop-blur-md transition-opacity"
-        onClick={handleClose}
+      {/* Backdrop Layer */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'rgba(250, 247, 239, 0.95)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        zIndex: -1
+      }} />
+
+      {/* Node Canvas Background */}
+      <canvas
+        ref={canvasRef}
+        className="modal-canvas"
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}
       />
 
-      {/* Modal Content */}
-      <div
-        className={`relative w-full max-w-6xl h-[90vh] md:h-[85vh] overflow-hidden flex flex-col bg-surface-light border border-white/10 rounded-3xl shadow-2xl shadow-primary/20 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${isVisible ? 'scale-100 translate-y-0' : 'scale-95 translate-y-8'
-          }`}
+      <style>{`
+        .modal-canvas {
+          opacity: 0.8;
+        }
+        @media (max-width: 768px) {
+          .modal-canvas {
+            opacity: 0.3;
+          }
+        }
+        .modal-grid {
+          position: relative;
+          z-index: 10;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 3rem;
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 6rem 2rem;
+        }
+
+        .modal-left {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .modal-right {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .modal-slideshow {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 16/10;
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 24px 48px -12px rgba(0,0,0,0.1);
+          background: var(--color-surface);
+        }
+
+        @media (min-width: 1024px) {
+          .modal-grid {
+            grid-template-columns: 1fr 1fr;
+            align-items: start;
+            padding: 0 4rem 8rem 4rem;
+            gap: 4rem;
+          }
+
+          .modal-left {
+            position: sticky;
+            top: 6rem;
+            /* Ensures the sticky column doesn't exceed viewport height causing scrolling issues */
+            height: fit-content;
+          }
+        }
+
+        @media (max-width: 1023px) {
+          .modal-grid {
+            padding-top: 1rem;
+          }
+          .modal-slideshow {
+            max-height: 50vh;
+          }
+        }
+      `}</style>
+
+      {/* Fixed Close Button (Outside scroll container to guarantee it never scrolls away) */}
+      <button 
+        onClick={onClose}
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          zIndex: 100,
+          pointerEvents: 'auto',
+          background: 'var(--color-ink)',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '50%',
+          width: '44px',
+          height: '44px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+          transition: 'all 0.3s ease',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1) rotate(90deg)'
+          e.currentTarget.style.background = 'var(--color-accent)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1) rotate(0deg)'
+          e.currentTarget.style.background = 'var(--color-ink)'
+        }}
       >
-        {/* Close Button */}
-        <button
-          onClick={handleClose}
-          className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/50 text-white/70 hover:text-white hover:bg-black/80 md:backdrop-blur-sm border border-white/10 transition-all hover:rotate-90 hover:scale-110"
-        >
-          <X size={24} />
-        </button>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
 
-        {/* Scrollable Area */}
-        <div
-          className="flex-1 min-h-0 overflow-y-auto scroll-smooth [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/40 w-full flex flex-col"
-          data-lenis-prevent="true"
-          onScroll={(e) => setHasScrolled(e.currentTarget.scrollTop > 50)}
-        >
-
-          {/* Hero Image Slider (Cinematic Banner) */}
-          <div className="relative w-full h-[25vh] sm:h-[30vh] md:h-[35vh] shrink-0 group/slider overflow-hidden bg-surface">
-            <div className="absolute inset-0 bg-gradient-to-t from-surface-light via-surface-light/20 to-transparent z-10 pointer-events-none" />
-
-            {/* Render all images for perfect crossfade animation */}
-            {project.images.map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`${project.title} screenshot ${idx + 1}`}
-                className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out ${currentImageIndex === idx
-                    ? 'opacity-100 scale-100 z-0'
-                    : 'opacity-0 scale-105 z-[-1]'
-                  }`}
-                loading="lazy"
-                decoding="async"
+      {/* Scrollable Content Container */}
+      <div 
+        data-lenis-prevent="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          zIndex: 10,
+          WebkitOverflowScrolling: 'touch',
+          paddingTop: '60px' // Space for the close button
+        }}
+      >
+        <div ref={contentRef} className="modal-grid">
+          
+          {/* LEFT COLUMN: Sticky Slideshow */}
+        <div className="modal-left">
+          <div className="modal-slideshow">
+            {project.details.images.map((img, i) => (
+              <img 
+                key={i}
+                src={img} 
+                alt={`${project.title} preview ${i+1}`} 
+                style={{ 
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%', 
+                  height: '100%', 
+                  objectFit: 'cover',
+                  opacity: currentImageIndex === i ? 1 : 0,
+                  transition: 'opacity 0.8s ease-in-out'
+                }} 
               />
             ))}
 
-            {/* Slider Controls (Only show if multiple images exist) */}
-            {project.images.length > 1 && (
-              <>
-                {/* Left Arrow */}
+            {/* Dots Indicator */}
+            <div style={{
+              position: 'absolute',
+              bottom: '20px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              display: 'flex',
+              gap: '8px',
+              zIndex: 10,
+              background: 'rgba(0,0,0,0.25)',
+              padding: '8px 12px',
+              borderRadius: '20px',
+              backdropFilter: 'blur(8px)'
+            }}>
+              {project.details.images.map((_, i) => (
                 <button
-                  onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? project.images.length - 1 : prev - 1))}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 rounded-full bg-black/40 text-white/70 hover:text-white hover:bg-primary/80 backdrop-blur-md border border-white/10 transition-all opacity-100 md:opacity-0 group-hover/slider:opacity-100 hover:scale-110"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
-                </button>
-
-                {/* Right Arrow */}
-                <button
-                  onClick={() => setCurrentImageIndex((prev) => (prev === project.images.length - 1 ? 0 : prev + 1))}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 rounded-full bg-black/40 text-white/70 hover:text-white hover:bg-primary/80 backdrop-blur-md border border-white/10 transition-all opacity-100 md:opacity-0 group-hover/slider:opacity-100 hover:scale-110"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
-                </button>
-
-                {/* Dots Indicator */}
-                <div className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
-                  {project.images.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentImageIndex(idx)}
-                      className={`h-2 rounded-full transition-all duration-300 ${currentImageIndex === idx
-                          ? 'w-6 bg-primary shadow-[0_0_10px_rgba(6,182,212,0.8)]'
-                          : 'w-2 bg-white/40 hover:bg-white/70'
-                        }`}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Content Body */}
-          <div className="flex flex-col p-6 sm:p-8 md:p-12 -mt-16 md:-mt-24 z-20 relative max-w-4xl mx-auto w-full">
-
-            {/* Title & Tags Centered */}
-            <div className="flex flex-col items-center text-center mb-10 md:mb-14">
-              <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-lg">
-                {project.title}
-              </h2>
-              <div className="flex flex-wrap justify-center items-center gap-2">
-                {project.tags.map((tag) => {
-                  const colors = getTagColors(tag)
-                  return (
-                    <span key={tag} className={`rounded-full border px-4 py-1.5 text-sm font-medium shadow-sm backdrop-blur-sm ${colors.bg} ${colors.text} ${colors.border}`}>
-                      {tag}
-                    </span>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Descriptions & Features */}
-            <div className="flex flex-col gap-10">
-
-              <div className="flex flex-col gap-6">
-                <h3 className="text-2xl font-semibold text-white border-b border-white/10 pb-2">Overview</h3>
-                {project.longDescription ? (
-                  <div className="flex flex-col gap-4 text-text-muted leading-relaxed text-lg">
-                    {project.longDescription.map((p, idx) => (
-                      <p key={idx}>{p}</p>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-text-muted leading-relaxed text-lg">{project.description}</p>
-                )}
-              </div>
-
-              {project.features && project.features.length > 0 && (
-                <div className="flex flex-col gap-6">
-                  <h3 className="text-2xl font-semibold text-white border-b border-white/10 pb-2">Key Features</h3>
-                  <ul className="flex flex-col gap-4">
-                    {project.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-4 text-text-muted text-lg">
-                        <CheckCircle2 className="text-primary shrink-0 mt-1" size={24} />
-                        <span className="leading-relaxed">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Actions & Details Centered at Bottom */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-4 mb-8 pt-8 border-t border-white/10">
-                {project.offlineMessage ? (
-                  <Button 
-                    variant="primary" 
-                    className="w-full sm:w-auto px-8 gap-2 justify-center py-3"
-                    onClick={() => alert(project.offlineMessage)}
-                  >
-                    <ExternalLink size={18} /> Live Preview
-                  </Button>
-                ) : project.live && (
-                  <a href={project.live} target="_blank" rel="noreferrer" className="w-full sm:w-auto">
-                    <Button variant="primary" className="w-full sm:w-auto px-8 gap-2 justify-center py-3">
-                      <ExternalLink size={18} /> Live Preview
-                    </Button>
-                  </a>
-                )}
-
-                {project.github && project.isPrivate ? (
-                  <Button
-                    variant="outline"
-                    className="w-full sm:w-auto px-8 gap-2 justify-center py-3"
-                    onClick={() => alert("This repository is private as the project is currently in production. Please check out the Live Preview instead!")}
-                    title="Private Repository"
-                  >
-                    <GithubIcon size={18} /> Source Code
-                  </Button>
-                ) : project.github && (
-                  <a href={project.github} target="_blank" rel="noreferrer" className="w-full sm:w-auto">
-                    <Button variant="outline" className="w-full sm:w-auto px-8 gap-2 justify-center py-3">
-                      <GithubIcon size={18} /> Source Code
-                    </Button>
-                  </a>
-                )}
-              </div>
-
+                  key={i}
+                  onClick={() => setCurrentImageIndex(i)}
+                  style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: currentImageIndex === i ? '#fff' : 'rgba(255,255,255,0.4)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
+                    transition: 'all 0.3s ease'
+                  }}
+                />
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Animated Scroll Indicator (Fades out when scrolled) */}
-        <div
-          className={`absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none flex flex-col items-center gap-2 transition-all duration-500 z-50 ${hasScrolled ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-            }`}
-        >
-          <div className="w-6 h-10 rounded-full border-2 border-white/30 flex justify-center p-1.5 bg-black/20 backdrop-blur-sm">
-            <div className="w-1.5 h-3 bg-white/70 rounded-full animate-bounce" />
+        {/* RIGHT COLUMN: Scrollable Content */}
+        <div className="modal-right">
+          
+          <h2 style={{ 
+            fontFamily: 'var(--font-display)', 
+            fontSize: 'clamp(32px, 4vw, 56px)', 
+            fontWeight: 600, 
+            color: 'var(--color-ink)',
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+            marginBottom: '1.5rem'
+          }}>
+            {project.title}
+          </h2>
+
+          <div style={{ 
+            display: 'flex', 
+            gap: '1rem', 
+            flexWrap: 'wrap',
+            marginBottom: '4rem'
+          }}>
+            {project.liveLink && (
+              <a 
+                href={project.liveLink} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                style={{ 
+                  padding: '14px 28px', 
+                  fontSize: '14px', 
+                  fontWeight: 600,
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  background: 'var(--color-accent, #E63946)', 
+                  color: '#fff',
+                  borderRadius: '30px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 14px rgba(230, 57, 70, 0.3)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(230, 57, 70, 0.4)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(230, 57, 70, 0.3)'
+                }}
+              >
+                Visit Live Site
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+              </a>
+            )}
+            {project.githubLink && (
+              <a 
+                href={project.githubLink} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                style={{ 
+                  padding: '14px 28px', 
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  background: 'rgba(0,0,0,0.04)', 
+                  color: 'var(--color-ink)',
+                  border: '1px solid rgba(0,0,0,0.08)',
+                  borderRadius: '30px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(0,0,0,0.08)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(0,0,0,0.04)'
+                }}
+              >
+                Source Code
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.03c3.15-.38 6.5-1.4 6.5-7.17 0-1.5-.5-2.73-1.3-3.7.13-.32.6-1.74-.13-3.6 0 0-1.1-.35-3.6 1.35a12.8 12.8 0 0 0-6.6 0c-2.5-1.7-3.6-1.35-3.6-1.35-.73 1.86-.26 3.28-.13 3.6-.8.97-1.3 2.2-1.3 3.7 0 5.75 3.35 6.79 6.5 7.17A4.8 4.8 0 0 0 8 18v4"></path></svg>
+              </a>
+            )}
           </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+            <div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', marginBottom: '1.5rem', color: 'var(--color-ink)' }}>Overview</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {project.details.overview.map((para, i) => (
+                  <p key={i} style={{ fontSize: '16.5px', lineHeight: 1.8, color: 'var(--color-body)' }}>
+                    {para}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', marginBottom: '1.5rem', color: 'var(--color-ink)' }}>Key Features</h3>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', paddingLeft: '0', margin: 0, listStyle: 'none' }}>
+                {project.details.features.map((feature, i) => {
+                  const [title, desc] = feature.split(': ')
+                  return (
+                    <li key={i} style={{ 
+                      fontSize: '16.5px', 
+                      lineHeight: 1.8, 
+                      color: 'var(--color-body)',
+                      position: 'relative',
+                      paddingLeft: '1.5rem'
+                    }}>
+                      <span style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: '10px',
+                        width: '6px',
+                        height: '6px',
+                        borderRadius: '50%',
+                        background: 'var(--color-accent)'
+                      }} />
+                      <strong style={{ color: 'var(--color-ink)', fontWeight: 600 }}>{title}:</strong> {desc}
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          </div>
+
+        </div>
         </div>
       </div>
     </div>,
