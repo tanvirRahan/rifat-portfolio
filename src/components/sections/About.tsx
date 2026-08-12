@@ -48,7 +48,7 @@ export default function About() {
             </p>
 
             <p className="about-text" style={{ fontSize: '16.5px', lineHeight: 1.8, color: 'var(--color-body)' }}>
-              My engineering work spans across Backend Architecture, Machine Learning, Data Automation, and responsive Frontend Development. My core focus is on building clean APIs, managing system resources, and deploying live applications that solve real-world problems efficiently.
+              My engineering work spans across Backend Architecture, Machine Learning & AI Agents, Data Automation, and responsive Frontend Development. My core focus is on building clean APIs, integrating LLMs, and deploying live applications that solve real-world problems efficiently.
             </p>
 
             <p className="about-text" style={{ fontSize: '16.5px', lineHeight: 1.8, color: 'var(--color-body)' }}>

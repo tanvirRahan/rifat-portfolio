@@ -24,6 +24,7 @@ export const skillCategories: SkillCategory[] = [
   {
     title: 'Backend & Web Auth',
     skills: [
+      { name: 'FastAPI', icon: 'https://cdn.simpleicons.org/fastapi/009688' },
       { name: 'Django', icon: 'https://cdn.simpleicons.org/django/092E20' },
       { name: 'Django Ninja', icon: 'https://cdn.simpleicons.org/django/092E20' },
       { name: 'Django REST', icon: 'https://cdn.simpleicons.org/django/092E20' },
@@ -37,20 +38,23 @@ export const skillCategories: SkillCategory[] = [
     ],
   },
   {
-    title: 'AI & Machine Learning',
+    title: 'AI Agents & Machine Learning',
     skills: [
       { name: 'Scikit-learn', icon: 'https://cdn.simpleicons.org/scikitlearn/000000' },
-      { name: 'XGBoost', icon: 'https://cdn.simpleicons.org/python/3776AB' },
-      { name: 'LightGBM', icon: 'https://cdn.simpleicons.org/pandas/150458' },
-      { name: 'Pandas', icon: 'https://cdn.simpleicons.org/pandas/150458' },
+      { name: 'LightGBM', icon: 'https://cdn.simpleicons.org/jupyter/F37626' },
+      { name: 'Large Language Models (LLMs)', icon: 'https://cdn.simpleicons.org/google/4285F4' },
+      { name: 'LangChain & Agents', icon: 'https://cdn.simpleicons.org/langchain/1C3C3C' },
+      { name: 'RAG (ChromaDB)', icon: 'https://cdn.simpleicons.org/databricks/FF3621' },
       { name: 'NLP', icon: 'https://cdn.simpleicons.org/huggingface/000000' },
-      { name: 'Meta Stacking', icon: 'https://cdn.simpleicons.org/pytorch/EE4C2C' },
-      { name: 'Model Tuning', icon: 'https://cdn.simpleicons.org/keras/D00000' },
+      { name: 'XGBoost', icon: 'https://cdn.simpleicons.org/python/3776AB' },
+      { name: 'Pandas', icon: 'https://cdn.simpleicons.org/pandas/150458' },
     ],
   },
   {
-    title: 'Data Extraction & Automation',
+    title: 'Automation, QA & Data',
     skills: [
+      { name: 'Playwright (E2E)', icon: 'https://cdn.simpleicons.org/cypress/2EAD33' },
+      { name: 'Pytest (API QA)', icon: 'https://cdn.simpleicons.org/pytest/0A9EDC' },
       { name: 'Python Automation', icon: 'https://cdn.simpleicons.org/python/3776AB' },
       { name: 'AsyncIO', icon: 'https://cdn.simpleicons.org/python/3776AB' },
       { name: 'aiohttp', icon: 'https://cdn.simpleicons.org/python/3776AB' },

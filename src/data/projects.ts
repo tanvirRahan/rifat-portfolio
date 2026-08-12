@@ -95,41 +95,40 @@ export const projectsData: Project[] = [
   },
   {
     id: 'careeros',
-    title: 'CareerOS - Predictive ML Career Engine',
-    shortDesc: 'An intelligent career prediction system bridging academic profiles with industry-defined career trajectories using Machine Learning.',
+    title: 'ChakriFit AI - Tri-Tier Agentic Career Engine & Continuous MLOps Pipeline',
+    shortDesc: 'An Agentic AI Career Counseling Platform featuring a Tri-Tier routing architecture between LightGBM and LLMs, with a Continuous MLOps Pipeline.',
     techStack: [
-      { name: 'Python', icon: 'https://cdn.simpleicons.org/python/3776AB' },
-      { name: 'Machine Learning', icon: 'https://cdn.simpleicons.org/openai/000000' },
-      { name: 'Scikit-Learn', icon: 'https://cdn.simpleicons.org/scikitlearn/F7931E' },
-      { name: 'Meta Stacking', icon: 'https://cdn.simpleicons.org/stackshare/0069FF' },
-      { name: 'Streamlit', icon: 'https://cdn.simpleicons.org/streamlit/FF4B4B' },
-      { name: 'XGBoost', icon: 'https://cdn.simpleicons.org/xgboost/000000' },
-      { name: 'LightGBM', icon: 'https://cdn.simpleicons.org/jupyter/F37626' },
-      { name: 'NLP', icon: 'https://cdn.simpleicons.org/spacy/09A3D5' },
-      { name: 'Pandas', icon: 'https://cdn.simpleicons.org/pandas/150458' },
-      { name: 'Plotly', icon: 'https://cdn.simpleicons.org/plotly/3F4F75' },
+      { name: 'Next.js 14', icon: 'https://cdn.simpleicons.org/nextdotjs/ffffff' },
+      { name: 'React 18', icon: 'https://cdn.simpleicons.org/react/61DAFB' },
+      { name: 'FastAPI', icon: 'https://cdn.simpleicons.org/fastapi/009688' },
+      { name: 'LightGBM', icon: 'https://cdn.simpleicons.org/jupyter/ffffff' },
+      { name: 'Large Language Models (LLMs)', icon: 'https://cdn.simpleicons.org/google/ffffff' },
+      { name: 'LangChain', icon: 'https://cdn.simpleicons.org/langchain/1C3C3C' },
+      { name: 'ChromaDB', icon: 'https://cdn.simpleicons.org/databricks/FF3621' },
+      { name: 'Playwright', icon: 'https://cdn.simpleicons.org/cypress/2EAD33' },
+      { name: 'Pytest', icon: 'https://cdn.simpleicons.org/pytest/0A9EDC' }
     ],
-    githubLink: 'https://github.com/tanvirRahan/industry-academia-alignment',
-    cardImage: '/images/projects/careeros-1.png',
+    githubLink: 'https://github.com/tanvirRahan/ChakriFit-ai',
+    liveLink: 'https://chakri-fit-ai.vercel.app/',
+    cardImage: '/images/projects/chakrifit-1.png',
     details: {
       overview: [
-        "I engineered CareerOS, an ML-based career prediction system designed to bridge the gap between academic profiles and industry expectations. The core objective was to take a student's degree, CGPA, logic score, and skill set to predict the most suitable career path and precisely map where they stand against real-world market demands.",
-        "To prevent data leakage and ensure predictions remained grounded in actual industry demand, I made the deliberate architectural choice to utilize two distinct datasets. I trained and validated the classification models using a student academic profile dataset, while exclusively relying on a separate real-world job portal dataset to build a dynamic industry skill taxonomy.",
-        "The machine learning pipeline required extensive EDA and feature engineering, including TF-IDF bigram extraction on skill text, technical vs. soft skill separation, and noise-word filtering. I benchmarked four distinct models, ultimately achieving 87.05% accuracy with a Stacking Ensemble, followed closely by LightGBM and XGBoost.",
-        "Beyond prediction, the system performs a deep competency gap analysis. I built a custom dark-mode interface using Streamlit, which leverages interactive Plotly radar charts and animated confidence bars to cross-reference a user's skills against the industry taxonomy, visually highlighting matched skills, missing proficiencies, and alternative career paths."
+        "I engineered ChakriFit AI, a self-learning career prediction system combining Machine Learning (ML) and Agentic AI workflows. It doesn't just guess your next job—it acts as an autonomous AI Agent to generate a personalized skill gap analysis powered by advanced Large Language Models (LLMs). To handle high traffic efficiently, I architected a Tri-Tier Confidence Router. High-confidence predictions are handled instantly by a local ML model (LightGBM), while lower-confidence cases seamlessly fall back to RAG (ChromaDB) or a full LLM. This approach guarantees highly efficient resource utilization while maintaining sub-100ms inference times.",
+        "One of the biggest architectural challenges was keeping the ML model up to date without heavy infrastructure. Instead of deploying external tools like Celery or Redis, I built a Continuous MLOps pipeline right into the FastAPI backend. Every 50 user inputs, a background asyncio subprocess automatically retrains the LightGBM model and hot-reloads it in production with zero downtime.",
+        "To ensure rock-solid stability, I fortified the system with a complete enterprise QA suite—running automated API integration tests via Pytest and E2E robotic UI tests with Playwright. The frontend is built with Next.js and Tailwind CSS, featuring Framer Motion micro-animations and interactive Radar charts."
       ],
       features: [
-        "Multi-Model Inference Engine: Benchmarked ML pipeline leveraging Stacking Ensemble (87.05%), LightGBM, XGBoost, and Random Forest.",
-        "Dynamic Skill Taxonomy: Smart NLP-based skill extraction and TF-IDF bigram modeling from real-world job portal datasets.",
-        "Competency Gap Analysis: Cross-references user profiles against industry benchmarks to identify matched and missing skills.",
-        "Interactive Visualizations: Custom Plotly radar charts and animated confidence bars to display career probabilities.",
-        "Strict Data Isolation: Deliberate separation of academic training data and industry skill data to prevent model leakage.",
-        "Modern UI/UX: Professional, fully reproducible web interface built with Streamlit and styled with custom CSS."
+        "Tri-Tier Intelligence Routing: Intelligently routes between Machine Learning (ML) Models, RAG Validation, and AI Agent Fallbacks based on confidence scores to optimize system efficiency and performance.",
+        "Continuous MLOps Pipeline: Automated background retraining and hot-reloading of the LightGBM model without server restarts or event-loop blocking.",
+        "AI-Powered Gap Analysis: Personalized markdown reports and interactive Radar Charts powered by Generative AI (LLMs).",
+        "High-Traffic Scalability: CPU offloading and async architectures in FastAPI to handle high concurrency, backed by LRU memory caching.",
+        "Enterprise QA Automation: 100% automated backend integration testing via Pytest and E2E robotic UI testing via Playwright.",
+        "Next.js Frontend: Modern UI featuring dark mode, glassmorphism, and Framer Motion micro-animations built with Next.js & Tailwind CSS."
       ],
       images: [
-        "/images/projects/careeros-1.png",
-        "/images/projects/careeros-2.png",
-        "/images/projects/careeros-3.png"
+        "/images/projects/chakrifit-1.png",
+        "/images/projects/chakrifit-2.png",
+        "/images/projects/chakrifit-3.png"
       ]
     }
   },

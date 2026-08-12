@@ -162,7 +162,7 @@ export default function Hero() {
               marginTop: '1.5rem', marginBottom: '2.5rem',
               animation: 'fade-up .7s ease .12s forwards', opacity: 0,
             }}>
-              <span className="kinetic-text">Full-Stack Developer</span> &nbsp;&middot;&nbsp; <span className="kinetic-text">AI & ML Engineer</span> &nbsp;&middot;&nbsp; <span className="kinetic-text">Data Automation</span>
+              <span className="kinetic-text">Software Developer</span> &nbsp;|&nbsp; <span className="kinetic-text">AI Agents & ML Engineer</span> &nbsp;|&nbsp; <span className="kinetic-text">Data Automation</span>
             </p>
 
             {/* Location */}
